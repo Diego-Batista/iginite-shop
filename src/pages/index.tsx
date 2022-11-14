@@ -6,14 +6,13 @@ import { HomeConatiner, Product, SliderContainer } from '../styles/pages/home'
 import { stripe } from '../lib/stripe'
 import { GetStaticProps } from 'next'
 import Stripe from 'stripe'
+import { CartButton } from '../components/CartButton'
+import { useCart } from '../../hooks/useCart'
+import { IProduct } from '../../contexts/CartContext'
+import { MouseEvent } from 'react'
 
 interface HomeProps {
-  products: {
-    id: string
-    name: string
-    price: string
-    imageUrl: string
-  }[]
+  products: IProduct[]
 }
 
 export default function Home({ products }: HomeProps) {
@@ -22,6 +21,13 @@ export default function Home({ products }: HomeProps) {
     skipSnaps: false,
     dragFree: true
   })
+
+  const { addToCart } = useCart()
+
+  function handleAddToCart(e: MouseEvent<HTMLButtonElement>, product: IProduct) {
+    e.preventDefault()
+    addToCart(product)
+  }
 
   return (
     <>
@@ -44,8 +50,11 @@ export default function Home({ products }: HomeProps) {
                       />
 
                       <footer>
-                        <strong>{product.name}</strong>
-                        <span>{product.price}</span>
+                        <div>
+                          <strong>{product.name}</strong>
+                          <span>{product.price}</span>
+                        </div>
+                        <CartButton color="green" size="large" onClick={(e) => handleAddToCart(e, product)}/>
                       </footer>
                   </Product> 
               ))}

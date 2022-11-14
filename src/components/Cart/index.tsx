@@ -1,10 +1,14 @@
 import * as Dialog from '@radix-ui/react-dialog';
 import Image from 'next/legacy/image';
 import { X } from 'phosphor-react';
+import { useCart } from '../../../hooks/useCart';
 import { CartButton } from "../CartButton";
 import { CartClose, CartContent, CartFinalization, CartProduct, CartProductDetails, CartProductImage, FinalizationDetails } from './styles';
 
 export function Cart() {
+    const { cartItems } = useCart()
+    const cartQuantity = cartItems.length
+
     return (
         <Dialog.Root>
             <Dialog.Trigger asChild>
@@ -21,26 +25,28 @@ export function Cart() {
                     <h2>Sacola de compras</h2>
 
                     <section>
-                        {/* <p>Parece que seu carrinho está vazio : (</p> */}
+                        {cartQuantity <= 0 && <p>Parece que seu carrinho está vazio : ( </p>}
 
-                        <CartProduct>
-                            <CartProductImage>
-                                <Image width={100} height={93} alt="" src="https://s3-alpha-sig.figma.com/img/387d/13ce/de131bd1ccf9bbe6b2331e88d3df20cd?Expires=1668988800&Signature=emFUp2nfox00ZOjdVI3pPsInBEvYX1XSRTjX54CSsNSnNucm1xtQR8wQ6ZTBuBbEqwmvSZfCWxSdO4j5JS65up~QL1SwGDgP2parVtFV3Sw1iQHAh9aROrlzZmxtv8Gv78l3brW0PERJnogk2kzvRcMFujJAc~gdQw-5DC8WAF7O8BSm3w9QLkPoXGafbqPDQPTCr1rspYt6HXtbZzz4oCSAIMuBeBN8erNjW2X0qNaiBOautebtytHHLEXCOObC0oOmmT4CiGpKXGtLDTTwCJIzh1VsVa7z-2ZGJ8RDBpUai3czHhtecsTlcSwdDbzWhABBpxjDSkmAIDMxTQwcNw__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA"/>
-                            </CartProductImage>
-                            <CartProductDetails>
-                                <p>Camiseta Beyond the Limits</p>
-                                <strong>R$ 79,90</strong>
+                        {cartItems.map(cartItem => (
+                            <CartProduct key={cartItem.id}>
+                                <CartProductImage>
+                                    <Image width={100} height={93} alt="" src={cartItem.imageUrl}/>
+                                </CartProductImage>
+                                <CartProductDetails>
+                                    <p>{cartItem.name}</p>
+                                    <strong>{cartItem.price}</strong>
 
-                                <button>Remover</button>
-                            </CartProductDetails>
-                        </CartProduct>
+                                    <button onClick={() => console.log('Removeu')}>Remover</button>
+                                </CartProductDetails>
+                            </CartProduct>
+                        ))}
 
                     </section>
                     <CartFinalization>
                         <FinalizationDetails>
                             <div>
                                 <span>Quantidade</span>
-                                <p>3 itens</p>
+                                <p>{cartQuantity} {cartQuantity > 1 ? 'itens' : 'item'}</p>
                             </div>
                             <div>
                                 <span>Valor total</span>

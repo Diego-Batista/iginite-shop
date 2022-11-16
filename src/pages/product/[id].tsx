@@ -1,8 +1,6 @@
-import axios from 'axios'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import Head from 'next/head'
 import Image from 'next/legacy/image'
-import { useState } from 'react'
 import Stripe from 'stripe'
 import { IProduct } from '../../../contexts/CartContext'
 import { useCart } from '../../../hooks/useCart'
@@ -75,6 +73,7 @@ export const getStaticProps: GetStaticProps<any, { id: string }> = async ({ para
           style: 'currency',
           currency: 'BRL'
         }).format(price.unit_amount / 100),
+        numberPrice: price.unit_amount / 100,
         description: product.description,
         defaultPriceId: price.id
       }

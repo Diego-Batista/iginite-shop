@@ -6,7 +6,7 @@ import { CartButton } from "../CartButton";
 import { CartClose, CartContent, CartFinalization, CartProduct, CartProductDetails, CartProductImage, FinalizationDetails } from './styles';
 
 export function Cart() {
-    const { cartItems } = useCart()
+    const { cartItems, removeCartItem } = useCart()
     const cartQuantity = cartItems.length
 
     return (
@@ -36,7 +36,7 @@ export function Cart() {
                                     <p>{cartItem.name}</p>
                                     <strong>{cartItem.price}</strong>
 
-                                    <button onClick={() => console.log('Removeu')}>Remover</button>
+                                    <button onClick={() => removeCartItem(cartItem.id)}>Remover</button>
                                 </CartProductDetails>
                             </CartProduct>
                         ))}

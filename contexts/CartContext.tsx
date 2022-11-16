@@ -14,6 +14,7 @@ export interface IProduct {
     cartItems: IProduct[];
     addToCart: (product: IProduct) => void
     checkItemAlreadyExists: (productId: string) => boolean
+    removeCartItem: (productId: string) => void
   }
   
   interface CartContextProviderProps {
@@ -29,12 +30,16 @@ export function CartContextProvider({ children }: CartContextProviderProps) {
         setCartItems(state => [...state, product])
     }
 
+    function removeCartItem(productId: string) {
+      setCartItems(state => state.filter(item => item.id !== productId))
+    }
+
     function checkItemAlreadyExists(productId: string){
         return cartItems.some(product => product.id === productId)
     }
 
     return (
-        <CartContext.Provider value={{ cartItems, addToCart, checkItemAlreadyExists }}>
+        <CartContext.Provider value={{ cartItems, addToCart, checkItemAlreadyExists, removeCartItem }}>
             {children}
         </CartContext.Provider>
     )
